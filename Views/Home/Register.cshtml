@@ -1,0 +1,53 @@
+﻿@model LabMaintanance5.Models.AllUser
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register</h2>
+
+@using (Html.BeginForm("Register", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.username)
+        @Html.TextBoxFor(model => model.username, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.username)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.email)
+        @Html.TextBoxFor(model => model.email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.email)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.role_id)
+        @Html.DropDownListFor(model => model.role_id, ViewBag.role_id as SelectList, "-- Select Role --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.role_id)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.password)
+        @Html.PasswordFor(model => model.password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.password)
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Register" class="btn btn-primary" />
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // Display alert message if model error exists
+        $(function () {
+            var modelErrors = '@Html.Raw(ViewData.ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage)';
+
+            if (modelErrors) {
+                alert(modelErrors);
+            }
+        });
+    </script>
+}

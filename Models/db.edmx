@@ -1,0 +1,411 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LabMaintanance4Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AllUsers">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="role_id" Type="int" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="hashPassword" Type="varchar" MaxLength="255" />
+          <Property Name="status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Complains">
+          <Key>
+            <PropertyRef Name="complain_id" />
+          </Key>
+          <Property Name="complain_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="Name_Of_the_Item" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="location" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="PriorityId" Type="int" Nullable="false" />
+          <Property Name="Repaired_StausId" Type="int" Nullable="false" />
+          <Property Name="image_data" Type="varbinary(max)" />
+          <Property Name="status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Priority">
+          <Key>
+            <PropertyRef Name="PriorityId" />
+          </Key>
+          <Property Name="PriorityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="priority" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Repaired_Staus">
+          <Key>
+            <PropertyRef Name="Repaired_StausId" />
+          </Key>
+          <Property Name="Repaired_StausId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="role_id" />
+          </Key>
+          <Property Name="role_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="role_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tech2">
+          <Key>
+            <PropertyRef Name="action_id" />
+          </Key>
+          <Property Name="action_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="complain_id" Type="int" Nullable="false" />
+          <Property Name="technicianName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="action_description" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="action_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__AllUsers__role_i__2E1BDC42">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="AllUsers" Type="Self.AllUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="role_id" />
+            </Principal>
+            <Dependent Role="AllUsers">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Complains__Prior__300424B4">
+          <End Role="Priority" Type="Self.Priority" Multiplicity="1" />
+          <End Role="Complains" Type="Self.Complains" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Priority">
+              <PropertyRef Name="PriorityId" />
+            </Principal>
+            <Dependent Role="Complains">
+              <PropertyRef Name="PriorityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Complains__Repai__30F848ED">
+          <End Role="Repaired_Staus" Type="Self.Repaired_Staus" Multiplicity="1" />
+          <End Role="Complains" Type="Self.Complains" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Repaired_Staus">
+              <PropertyRef Name="Repaired_StausId" />
+            </Principal>
+            <Dependent Role="Complains">
+              <PropertyRef Name="Repaired_StausId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Complains__user___2F10007B">
+          <End Role="AllUsers" Type="Self.AllUsers" Multiplicity="1" />
+          <End Role="Complains" Type="Self.Complains" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AllUsers">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Complains">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tech2__complain___31EC6D26">
+          <End Role="Complains" Type="Self.Complains" Multiplicity="1" />
+          <End Role="tech2" Type="Self.tech2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Complains">
+              <PropertyRef Name="complain_id" />
+            </Principal>
+            <Dependent Role="tech2">
+              <PropertyRef Name="complain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LabMaintanance4ModelStoreContainer">
+          <EntitySet Name="AllUsers" EntityType="Self.AllUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Complains" EntityType="Self.Complains" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Priority" EntityType="Self.Priority" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Repaired_Staus" EntityType="Self.Repaired_Staus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tech2" EntityType="Self.tech2" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__AllUsers__role_i__2E1BDC42" Association="Self.FK__AllUsers__role_i__2E1BDC42">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="AllUsers" EntitySet="AllUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Complains__Prior__300424B4" Association="Self.FK__Complains__Prior__300424B4">
+            <End Role="Priority" EntitySet="Priority" />
+            <End Role="Complains" EntitySet="Complains" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Complains__Repai__30F848ED" Association="Self.FK__Complains__Repai__30F848ED">
+            <End Role="Repaired_Staus" EntitySet="Repaired_Staus" />
+            <End Role="Complains" EntitySet="Complains" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Complains__user___2F10007B" Association="Self.FK__Complains__user___2F10007B">
+            <End Role="AllUsers" EntitySet="AllUsers" />
+            <End Role="Complains" EntitySet="Complains" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tech2__complain___31EC6D26" Association="Self.FK__tech2__complain___31EC6D26">
+            <End Role="Complains" EntitySet="Complains" />
+            <End Role="tech2" EntitySet="tech2" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LabMaintanance4Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AllUser">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="role_id" Type="Int32" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="hashPassword" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__AllUsers__role_i__2E1BDC42" FromRole="AllUsers" ToRole="Roles" />
+          <NavigationProperty Name="Complains" Relationship="Self.FK__Complains__user___2F10007B" FromRole="AllUsers" ToRole="Complains" />
+        </EntityType>
+        <EntityType Name="Complain">
+          <Key>
+            <PropertyRef Name="complain_id" />
+          </Key>
+          <Property Name="complain_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="Name_Of_the_Item" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PriorityId" Type="Int32" Nullable="false" />
+          <Property Name="Repaired_StausId" Type="Int32" Nullable="false" />
+          <Property Name="image_data" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AllUser" Relationship="Self.FK__Complains__user___2F10007B" FromRole="Complains" ToRole="AllUsers" />
+          <NavigationProperty Name="Priority" Relationship="Self.FK__Complains__Prior__300424B4" FromRole="Complains" ToRole="Priority" />
+          <NavigationProperty Name="Repaired_Staus" Relationship="Self.FK__Complains__Repai__30F848ED" FromRole="Complains" ToRole="Repaired_Staus" />
+          <NavigationProperty Name="tech2" Relationship="Self.FK__tech2__complain___31EC6D26" FromRole="Complains" ToRole="tech2" />
+        </EntityType>
+        <EntityType Name="Priority">
+          <Key>
+            <PropertyRef Name="PriorityId" />
+          </Key>
+          <Property Name="PriorityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="priority1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Complains" Relationship="Self.FK__Complains__Prior__300424B4" FromRole="Priority" ToRole="Complains" />
+        </EntityType>
+        <EntityType Name="Repaired_Staus">
+          <Key>
+            <PropertyRef Name="Repaired_StausId" />
+          </Key>
+          <Property Name="Repaired_StausId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Complains" Relationship="Self.FK__Complains__Repai__30F848ED" FromRole="Repaired_Staus" ToRole="Complains" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="role_id" />
+          </Key>
+          <Property Name="role_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AllUsers" Relationship="Self.FK__AllUsers__role_i__2E1BDC42" FromRole="Roles" ToRole="AllUsers" />
+        </EntityType>
+        <EntityType Name="tech2">
+          <Key>
+            <PropertyRef Name="action_id" />
+          </Key>
+          <Property Name="action_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="complain_id" Type="Int32" Nullable="false" />
+          <Property Name="technicianName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="action_description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="action_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Complain" Relationship="Self.FK__tech2__complain___31EC6D26" FromRole="tech2" ToRole="Complains" />
+        </EntityType>
+        <Association Name="FK__AllUsers__role_i__2E1BDC42">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="AllUsers" Type="Self.AllUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="role_id" />
+            </Principal>
+            <Dependent Role="AllUsers">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Complains__user___2F10007B">
+          <End Role="AllUsers" Type="Self.AllUser" Multiplicity="1" />
+          <End Role="Complains" Type="Self.Complain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AllUsers">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="Complains">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Complains__Prior__300424B4">
+          <End Role="Priority" Type="Self.Priority" Multiplicity="1" />
+          <End Role="Complains" Type="Self.Complain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Priority">
+              <PropertyRef Name="PriorityId" />
+            </Principal>
+            <Dependent Role="Complains">
+              <PropertyRef Name="PriorityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Complains__Repai__30F848ED">
+          <End Role="Repaired_Staus" Type="Self.Repaired_Staus" Multiplicity="1" />
+          <End Role="Complains" Type="Self.Complain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Repaired_Staus">
+              <PropertyRef Name="Repaired_StausId" />
+            </Principal>
+            <Dependent Role="Complains">
+              <PropertyRef Name="Repaired_StausId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tech2__complain___31EC6D26">
+          <End Role="Complains" Type="Self.Complain" Multiplicity="1" />
+          <End Role="tech2" Type="Self.tech2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Complains">
+              <PropertyRef Name="complain_id" />
+            </Principal>
+            <Dependent Role="tech2">
+              <PropertyRef Name="complain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LabMaintanance4Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AllUsers" EntityType="Self.AllUser" />
+          <EntitySet Name="Complains" EntityType="Self.Complain" />
+          <EntitySet Name="Priorities" EntityType="Self.Priority" />
+          <EntitySet Name="Repaired_Staus" EntityType="Self.Repaired_Staus" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="tech2" EntityType="Self.tech2" />
+          <AssociationSet Name="FK__AllUsers__role_i__2E1BDC42" Association="Self.FK__AllUsers__role_i__2E1BDC42">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="AllUsers" EntitySet="AllUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Complains__user___2F10007B" Association="Self.FK__Complains__user___2F10007B">
+            <End Role="AllUsers" EntitySet="AllUsers" />
+            <End Role="Complains" EntitySet="Complains" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Complains__Prior__300424B4" Association="Self.FK__Complains__Prior__300424B4">
+            <End Role="Priority" EntitySet="Priorities" />
+            <End Role="Complains" EntitySet="Complains" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Complains__Repai__30F848ED" Association="Self.FK__Complains__Repai__30F848ED">
+            <End Role="Repaired_Staus" EntitySet="Repaired_Staus" />
+            <End Role="Complains" EntitySet="Complains" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tech2__complain___31EC6D26" Association="Self.FK__tech2__complain___31EC6D26">
+            <End Role="Complains" EntitySet="Complains" />
+            <End Role="tech2" EntitySet="tech2" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LabMaintanance4ModelStoreContainer" CdmEntityContainer="LabMaintanance4Entities">
+          <EntitySetMapping Name="AllUsers">
+            <EntityTypeMapping TypeName="LabMaintanance4Model.AllUser">
+              <MappingFragment StoreEntitySet="AllUsers">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="hashPassword" ColumnName="hashPassword" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Complains">
+            <EntityTypeMapping TypeName="LabMaintanance4Model.Complain">
+              <MappingFragment StoreEntitySet="Complains">
+                <ScalarProperty Name="complain_id" ColumnName="complain_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="Name_Of_the_Item" ColumnName="Name_Of_the_Item" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="PriorityId" ColumnName="PriorityId" />
+                <ScalarProperty Name="Repaired_StausId" ColumnName="Repaired_StausId" />
+                <ScalarProperty Name="image_data" ColumnName="image_data" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Priorities">
+            <EntityTypeMapping TypeName="LabMaintanance4Model.Priority">
+              <MappingFragment StoreEntitySet="Priority">
+                <ScalarProperty Name="PriorityId" ColumnName="PriorityId" />
+                <ScalarProperty Name="priority1" ColumnName="priority" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Repaired_Staus">
+            <EntityTypeMapping TypeName="LabMaintanance4Model.Repaired_Staus">
+              <MappingFragment StoreEntitySet="Repaired_Staus">
+                <ScalarProperty Name="Repaired_StausId" ColumnName="Repaired_StausId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="LabMaintanance4Model.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="role_name" ColumnName="role_name" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tech2">
+            <EntityTypeMapping TypeName="LabMaintanance4Model.tech2">
+              <MappingFragment StoreEntitySet="tech2">
+                <ScalarProperty Name="action_id" ColumnName="action_id" />
+                <ScalarProperty Name="complain_id" ColumnName="complain_id" />
+                <ScalarProperty Name="technicianName" ColumnName="technicianName" />
+                <ScalarProperty Name="action_description" ColumnName="action_description" />
+                <ScalarProperty Name="action_date" ColumnName="action_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
