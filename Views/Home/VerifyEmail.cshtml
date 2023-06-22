@@ -1,0 +1,23 @@
+﻿@using (Html.BeginForm("VerifyEmail", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Verify Email</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="control-label col-md-2">OTP:</label>
+            <div class="col-md-10">
+                @Html.TextBox("otp", null, new { @class = "form-control" })
+                @Html.ValidationMessage("otp", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Verify" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,42 @@
+﻿@model LabMaintanance5.Models.AllUser
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div>
+                <h4>Login</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div>
+                    <label for="username">Username:</label>
+                    @Html.TextBoxFor(model => model.username, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    @Html.PasswordFor(model => model.password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <input type="submit" value="Login" class="btn btn-primary" />
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>
